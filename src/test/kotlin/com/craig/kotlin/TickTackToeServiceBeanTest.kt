@@ -16,8 +16,8 @@ class TickTackToeServiceBeanTest {
     @Test
     fun setPlayerMove() {
         val gameBoard = GameBoard()
-        val play1 = Play(1, Player.O)
-        val play2 = Play(2, Player.X)
+        val play1 = Play(1, Player.O.name)
+        val play2 = Play(2, Player.X.name)
         tickTackToe.setPlayerMove(gameBoard, play1)
         tickTackToe.setPlayerMove(gameBoard, play2)
 
@@ -46,13 +46,13 @@ class TickTackToeServiceBeanTest {
 
     @Test
     fun getWinner() {
-        val plays = hashSetOf(Play(1, Player.X), Play(2, Player.X), Play(3, Player.X))
+        val plays = hashSetOf(Play(1, Player.X.name), Play(2, Player.X.name), Play(3, Player.X.name))
         val gameBoard = GameBoard(plays)
         val result = tickTackToe.getWinner(gameBoard)
 
         assertEquals(Optional.of(Player.X), result)
 
-        val plays2 = hashSetOf(Play(4, Player.O), Play(5, Player.O), Play(6, Player.O), Play(1, Player.X), Play(9, Player.X))
+        val plays2 = hashSetOf(Play(4, Player.O.name), Play(5, Player.O.name), Play(6, Player.O.name), Play(1, Player.X.name), Play(9, Player.X.name))
         val gameBoard2 = GameBoard(plays2)
         val result2 = tickTackToe.getWinner(gameBoard2)
 

@@ -61,37 +61,19 @@ class ControlerTest {
     fun shouldReturnGameBoard() {
         val gameBoard = GameBoard()
         val player = Player.O
-        val play = Play(1, player)
+        val play = Play(1, player.name)
         val game = Game(gameBoard, play)
         val header = HttpHeaders()
         var objectMapper = ObjectMapper()
         val gameJSON = objectMapper.writeValueAsString(game)
-        /*var bodyMap = hashMapOf<String, String>()
-        bodyMap.put("gameBoard", gameBoardJSON)
-        bodyMap.put("play", playJSON)
-        bodyMap.put("player", playerJSON)
-        header.contentType = MediaType.APPLICATION_JSON
-        var httpEntity: HttpEntity<Map<String, String>> = HttpEntity(bodyMap, header)*/
+
         val requestBuilder = MockMvcRequestBuilders.get(
                 "/ticktacktoe").accept(MediaType.APPLICATION_JSON)
                 .content(gameJSON)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                /*.param("gameBoard", gameBoardJSON)
-                .param("play", playJSON)
-                .param("player", playerJSON)*/
                 .headers(header)
 
         val request = mockMvc.perform(requestBuilder)
-
-
-
-
-        val result = mockMvc.perform(requestBuilder).andReturn()
-
-
-        /*val result = testRestTemplate.getForEntity("/ticktacktoe", String::class.java, gameBoard, player, play)*/
-
-
     }
 }
 
