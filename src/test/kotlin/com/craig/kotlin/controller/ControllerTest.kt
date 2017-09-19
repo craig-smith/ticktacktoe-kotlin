@@ -14,32 +14,27 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.MockMvcBuilder
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
-
-
 
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = arrayOf(Application::class),
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ControlerTest {
+class ControllerTest {
     @Autowired
     lateinit var testRestTemplate: TestRestTemplate
 
     @Autowired
-    lateinit var  wac: WebApplicationContext
+    lateinit var wac: WebApplicationContext
 
-    lateinit var  mockMvc: MockMvc
+    lateinit var mockMvc: MockMvc
 
     @Before
     fun setup() {
@@ -58,7 +53,7 @@ class ControlerTest {
     }
 
     @Test
-    fun shouldReturnGameBoard() {
+    fun shouldReturnGame() {
         val gameBoard = GameBoard()
         val player = Player.O
         val play = Play(1, player.name)
@@ -73,7 +68,9 @@ class ControlerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .headers(header)
 
-        val request = mockMvc.perform(requestBuilder)
+        val request = mockMvc.perform(requestBuilder).andReturn()
     }
+
 }
+
 
