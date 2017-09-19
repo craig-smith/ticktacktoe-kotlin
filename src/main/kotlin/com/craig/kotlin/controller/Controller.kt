@@ -14,7 +14,7 @@ import java.util.*
 
 @RestController
 @EnableWebMvc
-class Controler {
+class Controller {
 
     @Autowired
     private lateinit var tickTackToeService: TickTackToeService
@@ -24,7 +24,8 @@ class Controler {
         return Message("hello")
     }
 
-    @GetMapping("/ticktacktoe", consumes = arrayOf(MediaType.APPLICATION_JSON_VALUE))
+
+    @GetMapping("/ticktacktoe/play", consumes = arrayOf(MediaType.APPLICATION_JSON_VALUE))
     fun getTickTackTo(@RequestBody game: Game): GameBoard {
         tickTackToeService.setPlayerMove(game.gameBoard, game.play)
         if (game.play.player.equals(Player.O)) tickTackToeService.setComputerMove(game.gameBoard, Player.X)
