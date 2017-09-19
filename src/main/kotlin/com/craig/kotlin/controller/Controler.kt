@@ -1,10 +1,7 @@
 package com.craig.kotlin.controller
 
 import com.craig.kotlin.TickTackToeService
-import com.craig.kotlin.data.GameBoard
-import com.craig.kotlin.data.Message
-import com.craig.kotlin.data.Play
-import com.craig.kotlin.data.Player
+import com.craig.kotlin.data.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
@@ -27,18 +24,17 @@ class Controler {
         return Message("hello")
     }
 
-    @GetMapping("/ticktacktoe")
-    fun getTickTackTo(@RequestParam gameBoard: String,
-                      @RequestParam player: String, @RequestParam play: String): GameBoard {
-        /*tickTackToeService.setPlayerMove(gameBoard, play)
-        if (player.equals(Player.O)) tickTackToeService.setComputerMove(gameBoard, Player.X)
-        else tickTackToeService.setComputerMove(gameBoard, Player.X)
+    @GetMapping("/ticktacktoe", consumes = arrayOf(MediaType.APPLICATION_JSON_VALUE))
+    fun getTickTackTo(@RequestBody game: Game): GameBoard {
+        tickTackToeService.setPlayerMove(game.gameBoard, game.play)
+        if (game.play.player.equals(Player.O)) tickTackToeService.setComputerMove(game.gameBoard, Player.X)
+        else tickTackToeService.setComputerMove(game.gameBoard, Player.X)
 
-        val winner = tickTackToeService.getWinner(gameBoard)
+        val winner = tickTackToeService.getWinner(game.gameBoard)
         if (winner.isPresent) {
-            gameBoard.setGameOver(winner.get())
-        }*/
-        return GameBoard()
+            game.gameBoard.setGameOver(winner.get())
+        }
+        return game.gameBoard
 
     }
 
