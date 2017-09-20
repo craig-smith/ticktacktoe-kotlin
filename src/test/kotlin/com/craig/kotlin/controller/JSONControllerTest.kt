@@ -27,7 +27,7 @@ import org.springframework.web.context.WebApplicationContext
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = arrayOf(Application::class),
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ControllerTest {
+class JSONControllerTest {
     @Autowired
     lateinit var testRestTemplate: TestRestTemplate
 

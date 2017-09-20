@@ -21,7 +21,7 @@ var app = new Vue({
         loaded: false
     }
 });
-$.getJSON('http://localhost:8080/hello', function (json) {
+$.getJSON('http://localhost:8181/hello', function (json) {
     app.json = json;
     app.loaded = true;
 });

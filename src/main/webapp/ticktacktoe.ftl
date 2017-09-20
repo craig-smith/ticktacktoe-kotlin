@@ -36,56 +36,56 @@
             <td style="border-left:solid; border-top:solid" onclick="sendPlay(9)"></td>
         </tr>
     </table>
-    <p>Choose X or O: </p>
-    <input type="radio" name="player" value="O"/>
-    <input type="radio" name="player" value="X"/>
 </div>
+<p>Choose X or O: </p>
+<input type="radio" name="player" value="O">O</>
+<input type="radio" name="player" value="X">X</>
 
 <script>
+
 var ticktacktoe = new Vue({
     el: '#ticktacktoe',
     data: {
-        gameBoard: null
+        gameBoard: []
     }
 });
 
 
 function sendPlay(value){
 
-    var play;
-    play.place = value;
-    play.player = player;
+    var play = {place: value, player: player};
 
-    var game;
-    game.play = play;
-    game.gameBoard = ticktacktoe.gameBoard;
+    var game = { play: play, 'gameBoard': ticktacktoe.gameBoard};
+
+    var data = JSON.stringify(game);
+    data = "game:" + data;
 
     $.ajax({
         contentType: 'application/json',
         data: {
-            JSON.stringify(game);
+            o: data
         },
         dataType: 'json',
         success: function(data){
             resetBoard(data)
         },
-        error: function(){
-            app.log("failed");
+        error: function(data){
+            console.log("failed" + data);
         },
         processData: false,
-        type: 'GET',
+        type: 'POST',
         url: '/ticktacktoe/play'
         });
-    };
-}
+    }
 
-function resetBoard(jsonData) = function() {
+
+function resetBoard(jsonData) {
     ticktacktoe.gameBoard = jsonData.game.gameBoard
 }
 
-$("input:radio[player]").click(function() {
-    var player = $(this).val();
-    $("input:radio[player]").disable()
+$("input:radio[name=player]").click(function() {
+     player = $(this).val();
+    $("input:radio[player]").disabled = true;
 });
 
 
