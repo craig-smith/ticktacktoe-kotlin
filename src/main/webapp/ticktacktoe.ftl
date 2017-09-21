@@ -55,10 +55,13 @@ function sendPlay(value){
 
     var play = {place: value, player: player};
 
-    var game = { play: play, 'gameBoard': ticktacktoe.gameBoard};
+    var gameBoard = ticktacktoe.gameBoard;
 
+    var game = {};
+    game.gameBoard = {};
+    game.gameBoard.boardSet = gameBoard;
+    game.play = play;
     var data = JSON.stringify(game);
-    data = "game:" + data;
 
     $.ajax({
         contentType: 'application/json',
@@ -72,7 +75,7 @@ function sendPlay(value){
         error: function(data){
             console.log("failed" + data);
         },
-        processData: false,
+        processData: true,
         type: 'POST',
         url: '/ticktacktoe/play'
         });
@@ -80,7 +83,7 @@ function sendPlay(value){
 
 
 function resetBoard(jsonData) {
-    ticktacktoe.gameBoard = jsonData.game.gameBoard
+    ticktacktoe.gameBoard = jsonData.game.boardSet
 }
 
 $("input:radio[name=player]").click(function() {
