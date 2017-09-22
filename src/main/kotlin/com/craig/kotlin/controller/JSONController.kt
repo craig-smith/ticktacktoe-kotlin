@@ -23,7 +23,7 @@ class JSONController {
 
 
     @PostMapping("/ticktacktoe/play", consumes = arrayOf(MediaType.APPLICATION_JSON_VALUE))
-    fun getTickTackTo(@RequestBody game: Game): GameBoard {
+    fun getTickTackTo(@RequestBody game: Game): Game {
         tickTackToeService.setPlayerMove(game.gameBoard, game.play)
         if (game.play.player.equals(Player.O)) tickTackToeService.setComputerMove(game.gameBoard, Player.X)
         else tickTackToeService.setComputerMove(game.gameBoard, Player.X)
@@ -32,7 +32,7 @@ class JSONController {
         if (winner.isPresent) {
             game.gameBoard.setGameOver(winner.get())
         }
-        return game.gameBoard
+        return game
 
     }
 

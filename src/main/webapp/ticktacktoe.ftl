@@ -64,26 +64,18 @@ function sendPlay(value){
     var data = JSON.stringify(game);
 
     $.ajax({
-        contentType: 'application/json',
-        data: {
-            o: data
-        },
-        dataType: 'json',
-        success: function(data){
-            resetBoard(data)
-        },
-        error: function(data){
-            console.log("failed" + data);
-        },
-        processData: true,
-        type: 'POST',
-        url: '/ticktacktoe/play'
-        });
-    }
-
-
+        type: 'post',
+        url: '/ticktacktoe/play',
+        data: JSON.stringify(game),
+        contentType: "application/json; charset=utf-8",
+        traditional: true,
+        success: function (data) {
+            resetBoard(data);
+        }
+    });
+}
 function resetBoard(jsonData) {
-    ticktacktoe.gameBoard = jsonData.game.boardSet
+    ticktacktoe.gameBoard = jsonData.gameBoard.boardSet
 }
 
 $("input:radio[name=player]").click(function() {

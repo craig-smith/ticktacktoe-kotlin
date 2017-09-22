@@ -62,13 +62,16 @@ class JSONControllerTest {
         var objectMapper = ObjectMapper()
         val gameJSON = objectMapper.writeValueAsString(game)
 
-        val requestBuilder = MockMvcRequestBuilders.get(
-                "/ticktacktoe").accept(MediaType.APPLICATION_JSON)
+        val requestBuilder = MockMvcRequestBuilders.post(
+                "/ticktacktoe/play").accept(MediaType.APPLICATION_JSON)
                 .content(gameJSON)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .headers(header)
 
         val request = mockMvc.perform(requestBuilder).andReturn()
+
+        val result = objectMapper.readValue(request.response.contentAsString, Game::class.java)
+
     }
 
 }
