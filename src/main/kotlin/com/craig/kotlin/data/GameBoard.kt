@@ -4,8 +4,8 @@ import java.util.*
 
 class GameBoard {
     val boardSet: MutableSet<Play>
-    private var gameOver = false
-    private var winner = Optional.empty<Player>()
+    var gameOver = false
+    var winner = Optional.empty<Player>()
 
 
     constructor(moves: MutableSet<Play>) {
@@ -24,5 +24,7 @@ class GameBoard {
         gameOver = true
         winner = Optional.of(player)
     }
+
+
 
 }

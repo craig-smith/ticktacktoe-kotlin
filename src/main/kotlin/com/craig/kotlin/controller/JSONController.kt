@@ -26,7 +26,7 @@ class JSONController {
     fun getTickTackTo(@RequestBody game: Game): Game {
         tickTackToeService.setPlayerMove(game.gameBoard, game.play)
         if (game.play.player.equals(Player.O)) tickTackToeService.setComputerMove(game.gameBoard, Player.X)
-        else tickTackToeService.setComputerMove(game.gameBoard, Player.X)
+        else tickTackToeService.setComputerMove(game.gameBoard, Player.O)
 
         val winner = tickTackToeService.getWinner(game.gameBoard)
         if (winner.isPresent) {

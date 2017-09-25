@@ -17,6 +17,9 @@
 
 <div id="ticktacktoe">
     <table title="tick tack toe">
+
+        <h2 v-if="gameOver">Winner: {{winner}}</h2>
+        <h2 v-else></h2>
         <tr>
             <td style="border-right:solid; border-bottom:solid" onclick="sendPlay(1)">{{gameBoard[0].player}}</td>
             <td style="border-bottom:solid; border-left:solid; border-right:solid" onclick="sendPlay(2)">
@@ -52,11 +55,12 @@ var ticktacktoe = new Vue({
                 {place: 4, player: ''},
                 {place: 5, player: ''},
                 {place: 6, player: ''},
-                {place: 6, player: ''},
                 {place: 7, player: ''},
                 {place: 8, player: ''},
                 {place: 9, player: ''}
-        ]
+        ],
+        gameOver: false,
+        winner: ''
     }
 });
 
@@ -68,7 +72,7 @@ function sendPlay(value){
     var gameBoard = ticktacktoe.gameBoard;
 
     var filteredGameBoard = gameBoard.filter(function(e) {
-        return e.payer == '';
+        return e.player === 'O' || e.player === 'X';
     });
     var game = {};
     game.gameBoard = {};
@@ -89,13 +93,16 @@ function sendPlay(value){
 }
 function resetBoard(jsonData) {
 
-    for(var jsonPlay in jsonData.gameBoard.boardSet) {
-        var play = $.grep(ticktacktoe.gameBoard, function(e) {
-        return e.place == jsonPlay
-        });
-        if(play.length == 1) {
-            play[0].player = jsonData.gameBoard.boardSet[jsonPlay].player;
-        }
+     jsonData.gameBoard.boardSet.forEach(function(item) {
+         var play = $.grep(ticktacktoe.gameBoard, function(play) {
+            return play.place == item.place;
+         });
+         play[0].player = item.player;
+     });
+
+    if( jsonData.gameBoard.gameOver == true ) {
+        ticktacktoe.gameOver = true;
+        ticktacktoe.winner = jsonData.gameBoard.winner;
     }
 }
 
