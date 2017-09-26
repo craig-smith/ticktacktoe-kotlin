@@ -70,7 +70,7 @@ class JSONControllerTest {
 
         val request = mockMvc.perform(requestBuilder).andReturn()
 
-        val result = objectMapper.readValue(request.response.contentAsString, Game::class.java)
+        //val result = objectMapper.readValue(request.response.contentAsString, Game::class.java)
 
     }
 

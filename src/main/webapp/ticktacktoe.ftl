@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://unpkg.com/vue"></script>
     <style>
-        td {height: 60px; width: 60px; padding: 0px; margin: 0px}
+        td {height: 60px; width: 60px; padding: 0px; margin: 0px; text-align:center}
         tr {padding: 0px; margin: 0px}
 
     </style>
@@ -97,7 +97,13 @@ function resetBoard(jsonData) {
          var play = $.grep(ticktacktoe.gameBoard, function(play) {
             return play.place == item.place;
          });
-         play[0].player = item.player;
+         if(play[0] !== 'undefined') {
+            play[0].player = item.player;
+         } else {
+            ticktacktoe.gameOver = true;
+            ticktacktoe.winner = 'No Winner, Tied Game';
+         }
+
      });
 
     if( jsonData.gameBoard.gameOver == true ) {
@@ -107,8 +113,11 @@ function resetBoard(jsonData) {
 }
 
 $("input:radio[name=player]").click(function() {
-     player = $(this).val();
-    $("input:radio[player]").attr('disabled', true);
+     if( !ticktacktoe.gameOver )
+        player = $(this).val();
+        $(this).attr('disabled', true);
+     }
+
 });
 
 

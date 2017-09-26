@@ -74,11 +74,24 @@ class TickTackToeServiceBean : TickTackToeService {
     }
 
     override fun setComputerMove(gameBoard: GameBoard, player: Player) {
-        val computerMove = calculateBestMove(gameBoard, player)
-        gameBoard.setMove(computerMove)
+        val bestComputerMove = calculateBestMove(gameBoard, player)
+        val bestOpponentMove =  if (player == Player.X) {
+            calculateBestMove(gameBoard, Player.O)
+        } else {
+            calculateBestMove(gameBoard, Player.X)
+        }
+
+        if(bestComputerMove.win) {
+            gameBoard.setMove(Play(bestComputerMove.spot, player.name))
+        } else if(bestOpponentMove.win) {
+            gameBoard.setMove(Play(bestOpponentMove.spot, player.name))
+        } else {
+            gameBoard.setMove(Play(bestComputerMove.spot, player.name))
+        }
+
     }
 
-    private fun calculateBestMove(gameBoard: GameBoard, player: Player): Play {
+    private fun calculateBestMove(gameBoard: GameBoard, player: Player): BestMove {
         val emptySpots = findAllEmptySpots(gameBoard)
         val playerMoves = gameBoard.boardSet.filter { play -> play.player == player }
 
@@ -88,7 +101,7 @@ class TickTackToeServiceBean : TickTackToeService {
         for (i in 1..3) {
             val bestMove = checkRowForWinningMove(playerMoves, emptySpots, this::acrossFilter, i, acrossRows.get(i - 1))
             if (bestMove.win) {
-                return Play(bestMove.spot, player.name)
+                return bestMove
             } else {
                 bestMoveList.add(bestMove)
             }
@@ -97,7 +110,7 @@ class TickTackToeServiceBean : TickTackToeService {
         for (i in 1..3) {
             val bestMove = checkRowForWinningMove(playerMoves, emptySpots, this::verticalFilter, i, verticalRows.get(i - 1))
             if (bestMove.win) {
-                return Play(bestMove.spot, player.name)
+                return bestMove
             } else {
                 bestMoveList.add(bestMove)
             }
@@ -106,23 +119,24 @@ class TickTackToeServiceBean : TickTackToeService {
         for (i in 1..2) {
             val bestMove = checkRowForWinningMove(playerMoves, emptySpots, this::diagonalFilter, i, diagonalRows.get(i - 1))
             if (bestMove.win) {
-                return Play(bestMove.spot, player.name)
+                return bestMove
             } else {
                 bestMoveList.add(bestMove)
             }
         }
+        return findBestMoveIfNoWin(bestMoveList, emptySpots, player)
+    }
+
+    private fun findBestMoveIfNoWin(bestMoveList: List<BestMove>, emptySpots: List<Int>, player: Player) :BestMove {
         val matchedMove = bestMoveList.filter { it -> it.spot > 0 }
         if (matchedMove.isNotEmpty()) {
-            return Play(matchedMove[0].spot, player.name)
+            return BestMove(matchedMove[0].spot, false);
         }
 
         return if(emptySpots.isNotEmpty()) {
             val randomSpot = emptySpots[(Math.random() * emptySpots.size).toInt()]
-            Play(randomSpot, player.name)
-        } else Play(0, player.name)
-
-
-
+            BestMove(randomSpot, false)
+        } else BestMove(0, false)
     }
 
     private fun checkRowForWinningMove(playerMoves: List<Play>, emptySpots: List<Int>,
