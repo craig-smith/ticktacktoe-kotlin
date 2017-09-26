@@ -59,4 +59,28 @@ class TickTackToeServiceBeanTest {
         assertEquals(Optional.of(Player.O), result2)
     }
 
+    @Test
+    fun testFullBoard() {
+
+        val play1 = Play(1, "X")
+        val play2 = Play(2, "O")
+        val play3 = Play( 3, "X")
+        val play4 = Play(4, "O")
+        val play5 = Play(5, "X")
+        val play6 = Play (6, "O")
+        val play7 = Play (7, "X")
+        val play8 = Play(8, "O")
+        val play9 = Play(9, "X")
+
+        var gameSet = mutableSetOf(play1, play2, play3, play4, play5, play6, play7, play8, play9)
+
+        var gameBoard = GameBoard(gameSet)
+
+        val winner = tickTackToe.getWinner(gameBoard)
+        tickTackToe.setComputerMove(gameBoard, Player.X)
+
+        assertTrue(winner.isPresent)
+
+    }
+
 }

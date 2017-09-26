@@ -86,7 +86,7 @@ class TickTackToeServiceBean : TickTackToeService {
 
 
         for (i in 1..3) {
-             val bestMove = checkRowForWinningMove(playerMoves, emptySpots, this::acrossFilter, i, acrossRows.get(i - 1))
+            val bestMove = checkRowForWinningMove(playerMoves, emptySpots, this::acrossFilter, i, acrossRows.get(i - 1))
             if (bestMove.win) {
                 return Play(bestMove.spot, player.name)
             } else {
@@ -95,7 +95,7 @@ class TickTackToeServiceBean : TickTackToeService {
         }
 
         for (i in 1..3) {
-             val bestMove = checkRowForWinningMove(playerMoves, emptySpots, this::verticalFilter, i, verticalRows.get(i - 1))
+            val bestMove = checkRowForWinningMove(playerMoves, emptySpots, this::verticalFilter, i, verticalRows.get(i - 1))
             if (bestMove.win) {
                 return Play(bestMove.spot, player.name)
             } else {
@@ -116,8 +116,11 @@ class TickTackToeServiceBean : TickTackToeService {
             return Play(matchedMove[0].spot, player.name)
         }
 
-        val randomSpot = emptySpots[(Math.random() * emptySpots.size).toInt()]
-        return Play(randomSpot, player.name)
+        return if(emptySpots.isNotEmpty()) {
+            val randomSpot = emptySpots[(Math.random() * emptySpots.size).toInt()]
+            Play(randomSpot, player.name)
+        } else Play(0, player.name)
+
 
 
     }
@@ -126,15 +129,18 @@ class TickTackToeServiceBean : TickTackToeService {
                                        filterFunction: KFunction2<@ParameterName(name = "movesList") List<Play>, @ParameterName(name = "rowNum") Int, List<Play>>,
                                        rowNum: Int, row: List<Int>): BestMove {
         val playerMovesOnRow = filterFunction(playerMoves, rowNum).map { play -> play.place }
-        val bestMove = row.first { i -> i !in playerMovesOnRow }
-        if (playerMovesOnRow.size == 2) {
-            if (emptySpots.contains(bestMove)) {
-                return BestMove(bestMove, true)
+        if (playerMovesOnRow.size != 3) {
+            val bestMove = row.first { i -> i !in playerMovesOnRow }
+            if (playerMovesOnRow.size == 2) {
+                if (emptySpots.contains(bestMove)) {
+                    return BestMove(bestMove, true)
+                }
+            } else if (emptySpots.contains(bestMove)) {
+                return BestMove(bestMove, false)
             }
-        } else if (emptySpots.contains(bestMove)) {
-            return BestMove(bestMove, false)
         }
         return BestMove(0, false)
+
     }
 
     private fun findAllEmptySpots(gameBoard: GameBoard): List<Int> {
