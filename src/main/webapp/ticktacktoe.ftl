@@ -42,7 +42,7 @@
 <p>Choose X or O: </p>
 <input type="radio" name="player" value="O">O</input>
 <input type="radio" name="player" value="X">X</input>
-
+<input type="button" value="Play Again" onclick="resetGame()">
 <script>
 
 var ticktacktoe = new Vue({
@@ -66,30 +66,32 @@ var ticktacktoe = new Vue({
 
 
 function sendPlay(value){
+    if( !ticktacktoe.gameOver) {
+        var play = {place: value, player: player};
 
-    var play = {place: value, player: player};
+        var gameBoard = ticktacktoe.gameBoard;
 
-    var gameBoard = ticktacktoe.gameBoard;
+        var filteredGameBoard = gameBoard.filter(function(e) {
+            return e.player === 'O' || e.player === 'X';
+        });
+        var game = {};
+        game.gameBoard = {};
+        game.gameBoard.boardSet = filteredGameBoard;
+        game.play = play;
+        var data = JSON.stringify(game);
 
-    var filteredGameBoard = gameBoard.filter(function(e) {
-        return e.player === 'O' || e.player === 'X';
-    });
-    var game = {};
-    game.gameBoard = {};
-    game.gameBoard.boardSet = filteredGameBoard;
-    game.play = play;
-    var data = JSON.stringify(game);
+        $.ajax({
+            type: 'post',
+            url: '/ticktacktoe/play',
+            data: JSON.stringify(game),
+            contentType: "application/json; charset=utf-8",
+            traditional: true,
+            success: function (data) {
+                resetBoard(data);
+            }
+        });
 
-    $.ajax({
-        type: 'post',
-        url: '/ticktacktoe/play',
-        data: JSON.stringify(game),
-        contentType: "application/json; charset=utf-8",
-        traditional: true,
-        success: function (data) {
-            resetBoard(data);
-        }
-    });
+    }
 }
 function resetBoard(jsonData) {
 
@@ -113,12 +115,18 @@ function resetBoard(jsonData) {
 }
 
 $("input:radio[name=player]").click(function() {
-     if( !ticktacktoe.gameOver )
+     if( !ticktacktoe.gameOver ) {
         player = $(this).val();
-        $(this).attr('disabled', true);
+        $("input:radio[name=player]").attr('disabled', true);
      }
 
 });
 
-
+function resetGame() {
+    ticktacktoe.gameBoard.forEach(function (play) {
+        play.player = '';
+    });
+    ticktacktoe.gameOver = false;
+    ticktacktoe.winner = '';
+}
 </script>

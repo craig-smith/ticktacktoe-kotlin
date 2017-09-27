@@ -171,7 +171,14 @@ class TickTackToeServiceBean : TickTackToeService {
         if (optionalWinnerVertical.isPresent) {
             return optionalWinnerVertical
         }
-        return checkRow(gameBoard, this::diagonalFilter)
+        val optionalWinnerDiagonal = checkRow(gameBoard, this::diagonalFilter)
+
+        return optionalWinnerDiagonal
+
+        /*val emptySpots = findAllEmptySpots(gameBoard)
+        if( emptySpots.isEmpty() ) {
+
+        }*/
     }
 
     private fun checkRow(gameBoard: GameBoard, filterFunction: KFunction2<@ParameterName(name = "movesList") List<Play>, @ParameterName(name = "rowNum") Int, List<Play>>): Optional<Player> {
