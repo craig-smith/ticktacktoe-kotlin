@@ -30,18 +30,15 @@ class JSONController {
     fun getTickTackTo(@RequestBody game: Game): Game {
         tickTackToeService.setPlayerMove(game.gameBoard, game.play)
 
-        var winner = tickTackToeService.getWinner(game.gameBoard)
-        if (winner.isPresent) {
-            game.gameBoard.setGameOver(winner.get())
+        tickTackToeService.calculateWinner(game.gameBoard)
+        if (game.gameBoard.gameOver) {
             return game
         } else {
             if (game.play.player.equals(Player.O)) tickTackToeService.setComputerMove(game.gameBoard, Player.X)
             else tickTackToeService.setComputerMove(game.gameBoard, Player.O)
         }
-        winner = tickTackToeService.getWinner(game.gameBoard)
-        if (winner.isPresent) {
-            game.gameBoard.setGameOver(winner.get())
-        }
+        tickTackToeService.calculateWinner(game.gameBoard)
+
         return game
 
     }

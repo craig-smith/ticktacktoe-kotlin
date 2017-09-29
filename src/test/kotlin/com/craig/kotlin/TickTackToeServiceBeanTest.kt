@@ -7,7 +7,6 @@ import org.junit.Test
 
 import org.junit.Assert.*
 import java.util.*
-import kotlin.collections.HashSet
 
 class TickTackToeServiceBeanTest {
 
@@ -41,20 +40,20 @@ class TickTackToeServiceBeanTest {
         tickTackToe.setComputerMove(gameBoard, Player.X)
         tickTackToe.setComputerMove(gameBoard, Player.X)
 
-        assertEquals(Optional.of(Player.X), tickTackToe.getWinner(gameBoard))
+        assertEquals(Optional.of(Player.X), tickTackToe.calculateWinner(gameBoard))
     }
 
     @Test
     fun getWinner() {
         val plays = hashSetOf(Play(1, Player.X.name), Play(2, Player.X.name), Play(3, Player.X.name))
         val gameBoard = GameBoard(plays)
-        val result = tickTackToe.getWinner(gameBoard)
+        val result = tickTackToe.calculateWinner(gameBoard)
 
         assertEquals(Optional.of(Player.X), result)
 
         val plays2 = hashSetOf(Play(4, Player.O.name), Play(5, Player.O.name), Play(6, Player.O.name), Play(1, Player.X.name), Play(9, Player.X.name))
         val gameBoard2 = GameBoard(plays2)
-        val result2 = tickTackToe.getWinner(gameBoard2)
+        val result2 = tickTackToe.calculateWinner(gameBoard2)
 
         assertEquals(Optional.of(Player.O), result2)
     }
@@ -76,10 +75,10 @@ class TickTackToeServiceBeanTest {
 
         var gameBoard = GameBoard(gameSet)
 
-        val winner = tickTackToe.getWinner(gameBoard)
+        tickTackToe.calculateWinner(gameBoard)
         tickTackToe.setComputerMove(gameBoard, Player.X)
 
-        assertTrue(winner.isPresent)
+        assertTrue(gameBoard.winner.isPresent)
 
     }
 

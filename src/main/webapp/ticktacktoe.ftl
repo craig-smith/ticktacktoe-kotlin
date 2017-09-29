@@ -61,10 +61,6 @@
         </tr>
     </table>
 </div>
-<p>Choose X or O: </p>
-<input type="radio" name="player" value="O">O</input>
-<input type="radio" name="player" value="X">X</input>
-<input type="button" value="Play Again" onclick="resetGame()">
 <script>
 
 var ticktacktoe = new Vue({
@@ -89,6 +85,7 @@ var ticktacktoe = new Vue({
 
 function sendPlay(value){
     if( !ticktacktoe.gameOver) {
+        var player = 'X';
         var play = {place: value, player: player};
 
         var gameBoard = ticktacktoe.gameBoard;
@@ -123,17 +120,28 @@ function resetBoard(jsonData) {
          });
          if(play[0] !== 'undefined') {
             play[0].player = item.player;
-         } else {
-            ticktacktoe.gameOver = true;
-            ticktacktoe.winner = 'No Winner, Tied Game';
          }
-
      });
 
     if( jsonData.gameBoard.gameOver == true ) {
         ticktacktoe.gameOver = true;
-        ticktacktoe.winner = jsonData.gameBoard.winner;
+        if(jsonData.gameBoard.winner == '') {
+            ticktacktoe.winner = "No Winner, Tied Game!";
+        } else {
+            ticktacktoe.winner = jsonData.gameBoard.winner;
+        }
+
     }
+}
+
+
+
+function resetGame() {
+    ticktacktoe.gameBoard.forEach(function (play) {
+        play.player = '';
+    });
+    ticktacktoe.gameOver = false;
+    ticktacktoe.winner = '';
 }
 
 $("input:radio[name=player]").click(function() {
@@ -144,12 +152,8 @@ $("input:radio[name=player]").click(function() {
 
 });
 
-function resetGame() {
-    ticktacktoe.gameBoard.forEach(function (play) {
-        play.player = '';
-    });
-    ticktacktoe.gameOver = false;
-    ticktacktoe.winner = '';
-}
-
 </script>
+<p>Choose X or O: </p>
+<input type="radio" name="player" value="O">O</input>
+<input type="radio" name="player" value="X">X</input>
+<input type="button" value="Play Again" onclick="resetGame()">

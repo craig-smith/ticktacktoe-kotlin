@@ -162,23 +162,24 @@ class TickTackToeServiceBean : TickTackToeService {
         return allSpots.filter { i: Int -> i !in playedSpots }
     }
 
-    override fun getWinner(gameBoard: GameBoard): Optional<Player> {
+    override fun calculateWinner(gameBoard: GameBoard) {
         val optionalWinnerAcross = checkRow(gameBoard, this::acrossFilter)
         if (optionalWinnerAcross.isPresent) {
-            return optionalWinnerAcross
+            gameBoard.setGameOver(optionalWinnerAcross)
         }
         val optionalWinnerVertical = checkRow(gameBoard, this::verticalFilter)
         if (optionalWinnerVertical.isPresent) {
-            return optionalWinnerVertical
+            gameBoard.setGameOver(optionalWinnerVertical)
         }
         val optionalWinnerDiagonal = checkRow(gameBoard, this::diagonalFilter)
+        if (optionalWinnerDiagonal.isPresent) {
+            gameBoard.setGameOver(optionalWinnerDiagonal)
+        }
 
-        return optionalWinnerDiagonal
-
-        /*val emptySpots = findAllEmptySpots(gameBoard)
+        val emptySpots = findAllEmptySpots(gameBoard)
         if( emptySpots.isEmpty() ) {
-
-        }*/
+            gameBoard.setGameOver(Optional.empty())
+        }
     }
 
     private fun checkRow(gameBoard: GameBoard, filterFunction: KFunction2<@ParameterName(name = "movesList") List<Play>, @ParameterName(name = "rowNum") Int, List<Play>>): Optional<Player> {

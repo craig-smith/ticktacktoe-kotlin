@@ -8,6 +8,6 @@ import java.util.*
 interface TickTackToeService {
     fun setComputerMove(gameBoard: GameBoard, player: Player)
     fun setPlayerMove(gameBoard: GameBoard, play: Play)
-    fun getWinner(gameBoard: GameBoard): Optional<Player>
+    fun calculateWinner(gameBoard: GameBoard)
 
 }

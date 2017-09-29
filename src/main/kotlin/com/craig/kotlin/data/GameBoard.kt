@@ -20,9 +20,13 @@ class GameBoard {
         boardSet.add(play)
     }
 
-    fun setGameOver(player: Player) {
+    fun setGameOver(player: Optional<Player>) {
         gameOver = true
-        winner = Optional.of(player)
+        winner = player
+    }
+
+    fun isGameOver(): Boolean {
+        return gameOver
     }
 
 
