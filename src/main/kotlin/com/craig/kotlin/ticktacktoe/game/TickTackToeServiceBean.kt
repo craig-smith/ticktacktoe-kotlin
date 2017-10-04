@@ -1,9 +1,5 @@
-package com.craig.kotlin
+package com.craig.kotlin.ticktacktoe.game
 
-import com.craig.kotlin.data.BestMove
-import com.craig.kotlin.data.GameBoard
-import com.craig.kotlin.data.Play
-import com.craig.kotlin.data.Player
 import org.springframework.stereotype.Component
 import java.util.*
 import kotlin.reflect.KFunction2
@@ -69,31 +65,37 @@ class TickTackToeServiceBean : TickTackToeService {
         }
     }
 
-    override fun setPlayerMove(gameBoard: GameBoard, play: Play) {
-        gameBoard.setMove(play)
+    override fun setPlayerMove(gameBoardDTO: GameBoardDTO, play: Play) {
+        gameBoardDTO.setMove(play)
     }
 
-    override fun setComputerMove(gameBoard: GameBoard, player: Player) {
-        val bestComputerMove = calculateBestMove(gameBoard, player)
+    override fun setComputerMove(gameBoardDTO: GameBoardDTO, player: Player): Play {
+        val bestComputerMove = calculateBestMove(gameBoardDTO, player)
         val bestOpponentMove =  if (player == Player.X) {
-            calculateBestMove(gameBoard, Player.O)
+            calculateBestMove(gameBoardDTO, Player.O)
         } else {
-            calculateBestMove(gameBoard, Player.X)
+            calculateBestMove(gameBoardDTO, Player.X)
         }
 
-        if(bestComputerMove.win) {
-            gameBoard.setMove(Play(bestComputerMove.spot, player.name))
-        } else if(bestOpponentMove.win) {
-            gameBoard.setMove(Play(bestOpponentMove.spot, player.name))
-        } else {
-            gameBoard.setMove(Play(bestComputerMove.spot, player.name))
+        return when {
+            bestComputerMove.win -> {
+                gameBoardDTO.setMove(Play(bestComputerMove.spot, player.name))
+                Play(bestComputerMove.spot, player.name)
+            }
+            else -> if(bestOpponentMove.win) {
+                gameBoardDTO.setMove(Play(bestOpponentMove.spot, player.name))
+                Play(bestOpponentMove.spot, player.name)
+            } else {
+                gameBoardDTO.setMove(Play(bestComputerMove.spot, player.name))
+                Play(bestComputerMove.spot, player.name)
+            }
         }
 
     }
 
-    private fun calculateBestMove(gameBoard: GameBoard, player: Player): BestMove {
-        val emptySpots = findAllEmptySpots(gameBoard)
-        val playerMoves = gameBoard.boardSet.filter { play -> play.player == player }
+    private fun calculateBestMove(gameBoardDTO: GameBoardDTO, player: Player): BestMove {
+        val emptySpots = findAllEmptySpots(gameBoardDTO)
+        val playerMoves = gameBoardDTO.boardSet.filter { play -> play.player == player }
 
         var bestMoveList = arrayListOf<BestMove>()
 
@@ -127,7 +129,7 @@ class TickTackToeServiceBean : TickTackToeService {
         return findBestMoveIfNoWin(bestMoveList, emptySpots, player)
     }
 
-    private fun findBestMoveIfNoWin(bestMoveList: List<BestMove>, emptySpots: List<Int>, player: Player) :BestMove {
+    private fun findBestMoveIfNoWin(bestMoveList: List<BestMove>, emptySpots: List<Int>, player: Player) : BestMove {
         val matchedMove = bestMoveList.filter { it -> it.spot > 0 }
         if (matchedMove.isNotEmpty()) {
             return BestMove(matchedMove[0].spot, false);
@@ -157,41 +159,41 @@ class TickTackToeServiceBean : TickTackToeService {
 
     }
 
-    private fun findAllEmptySpots(gameBoard: GameBoard): List<Int> {
-        val playedSpots: List<Int> = gameBoard.boardSet.map { play -> play.place }
+    private fun findAllEmptySpots(gameBoardDTO: GameBoardDTO): List<Int> {
+        val playedSpots: List<Int> = gameBoardDTO.boardSet.map { play -> play.place }
         return allSpots.filter { i: Int -> i !in playedSpots }
     }
 
-    override fun calculateWinner(gameBoard: GameBoard) {
-        val optionalWinnerAcross = checkRow(gameBoard, this::acrossFilter)
+    override fun calculateWinner(gameBoardDTO: GameBoardDTO) {
+        val optionalWinnerAcross = checkRow(gameBoardDTO, this::acrossFilter)
         if (optionalWinnerAcross.isPresent) {
-            gameBoard.setGameOver(optionalWinnerAcross)
+            gameBoardDTO.setGameOver(optionalWinnerAcross)
         }
-        val optionalWinnerVertical = checkRow(gameBoard, this::verticalFilter)
+        val optionalWinnerVertical = checkRow(gameBoardDTO, this::verticalFilter)
         if (optionalWinnerVertical.isPresent) {
-            gameBoard.setGameOver(optionalWinnerVertical)
+            gameBoardDTO.setGameOver(optionalWinnerVertical)
         }
-        val optionalWinnerDiagonal = checkRow(gameBoard, this::diagonalFilter)
+        val optionalWinnerDiagonal = checkRow(gameBoardDTO, this::diagonalFilter)
         if (optionalWinnerDiagonal.isPresent) {
-            gameBoard.setGameOver(optionalWinnerDiagonal)
+            gameBoardDTO.setGameOver(optionalWinnerDiagonal)
         }
 
-        val emptySpots = findAllEmptySpots(gameBoard)
+        val emptySpots = findAllEmptySpots(gameBoardDTO)
         if( emptySpots.isEmpty() ) {
-            gameBoard.setGameOver(Optional.empty())
+            gameBoardDTO.setGameOver(Optional.empty())
         }
     }
 
-    private fun checkRow(gameBoard: GameBoard, filterFunction: KFunction2<@ParameterName(name = "movesList") List<Play>, @ParameterName(name = "rowNum") Int, List<Play>>): Optional<Player> {
+    private fun checkRow(gameBoardDTO: GameBoardDTO, filterFunction: KFunction2<@ParameterName(name = "movesList") List<Play>, @ParameterName(name = "rowNum") Int, List<Play>>): Optional<Player> {
         for (i in 1..3) {
-            val xMatch = filterFunction(gameBoard.boardSet.toList(), i).filter { play -> play.player == Player.X }
+            val xMatch = filterFunction(gameBoardDTO.boardSet.toList(), i).filter { play -> play.player == Player.X }
             if (xMatch.size == 3) {
                 return Optional.of(Player.X)
             }
         }
 
         for (i in 1..3) {
-            val oMatch = filterFunction(gameBoard.boardSet.toList(), i).filter { play -> play.player == Player.O }
+            val oMatch = filterFunction(gameBoardDTO.boardSet.toList(), i).filter { play -> play.player == Player.O }
             if (oMatch.size == 3) {
                 return Optional.of(Player.O)
             }

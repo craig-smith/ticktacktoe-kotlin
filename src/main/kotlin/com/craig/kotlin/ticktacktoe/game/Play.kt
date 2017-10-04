@@ -1,4 +1,4 @@
-package com.craig.kotlin.data
+package com.craig.kotlin.ticktacktoe.game
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnore
