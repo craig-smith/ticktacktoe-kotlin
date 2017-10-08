@@ -69,39 +69,36 @@ var ticktacktoe = new Vue({
                 {place: 9, player: ''}
         ],
         gameOver: false,
-        winner: ''
+        winner: '',
+        gameId: 0
     }
 });
 
 
 function sendPlay(value){
-    if( !ticktacktoe.gameOver) {
+    if( !ticktacktoe.gameOver && ticktacktoe.gameId > 0 ) {
 
         if( player === '') {
             alert("you must choose a player");
         } else {
             var play = {place: value, player: player};
 
-            var gameBoardDTO = ticktacktoe.gameBoardDTO;
-
-            var filteredGameBoard = gameBoardDTO.filter(function(e) {
-                return e.player === 'O' || e.player === 'X';
-            });
-            var gameDTO = {};
-            gameDTO.gameBoardDTO = {};
-            gameDTO.gameBoardDTO.boardSet = filteredGameBoard;
-            gameDTO.play = play;
+            var game = {};
+            game.gameId = ticktacktoe.gameId;
+            game.play = play;
 
             $.ajax({
                 type: 'post',
                 url: '/ticktacktoe/play',
-                data: JSON.stringify(gameDTO),
+                data: JSON.stringify(game),
                 contentType: "application/json; charset=utf-8",
                 traditional: true,
                 success: function (data) {
                     resetBoard(data);
                 }
             });
+
+            ticktacktoe.gameBoardDTO[value].player = player;
 
         }
     }
@@ -110,21 +107,14 @@ function sendPlay(value){
 }
 function resetBoard(jsonData) {
 
-     jsonData.gameBoardDTO.boardSet.forEach(function(item) {
-         var play = $.grep(ticktacktoe.gameBoardDTO, function(play) {
-            return play.place === item.place;
-         });
-         if(play[0] !== 'undefined') {
-            play[0].player = item.player;
-         }
-     });
+    ticktacktoe.gameBoardDTO[jsonData.play.place].player = jsonData.play.player;
 
-    if( jsonData.gameBoardDTO.gameOver === true ) {
+    if( jsonData.game.gameOver === true ) {
         ticktacktoe.gameOver = true;
-        if(jsonData.gameBoardDTO.winner === null) {
+        if(jsonData.game.winner === null) {
             ticktacktoe.winner = "No Winner, Tied Game!";
         } else {
-            ticktacktoe.winner = jsonData.gameBoardDTO.winner;
+            ticktacktoe.winner = jsonData.game.winner;
         }
 
     }
@@ -138,6 +128,16 @@ function resetGame() {
     });
     ticktacktoe.gameOver = false;
     ticktacktoe.winner = '';
+
+    $.ajax({
+                type: 'get',
+                url: '/ticktacktoe/newGame',
+                contentType: "application/json; charset=utf-8",
+                traditional: true,
+                success: function (data) {
+                    ticktacktoe.gameId = data.gameBoardDTOId
+                }
+    });
 }
 
 $("input:radio[name=player]").click(function() {
@@ -149,4 +149,5 @@ $("input:radio[name=player]").click(function() {
 });
 
 </script>
+</html>
 

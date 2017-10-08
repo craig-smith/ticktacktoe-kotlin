@@ -1,27 +1,34 @@
 package com.craig.kotlin.ticktacktoe.game.data
 
 import com.craig.kotlin.ticktacktoe.game.GameBoardDTO
-import com.craig.kotlin.ticktacktoe.game.Play
-import com.craig.kotlin.ticktacktoe.game.Player
 import java.util.*
-import javax.persistence.Entity
-import javax.persistence.Table
+import javax.persistence.*
+
 
 @Entity
 @Table(name = "GAMEBOARD")
 internal data class GameBoardEntity(
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long? = null,
+
+        @OneToMany(targetEntity = Play::class, mappedBy = "id")
         val gameBoard: MutableSet<Play>,
+
+        @Column(name = "GAME_OVER")
         val gameOver: Boolean,
-        val winner: Optional<Player>) {
 
-    private constructor() : this(gameBoard = mutableSetOf(), gameOver = false, winner = Optional.empty())
+        @Column(name = "WINNER")
+        @Enumerated(EnumType.ORDINAL)
+        val winner: Player? = null) {
 
-    fun toDTO() : GameBoardDTO = GameBoardDTO(id!!, gameBoard, gameOver, winner)
+    private constructor() : this(gameBoard = mutableSetOf(), gameOver = false, winner = null)
+
+    fun toDTO() : GameBoardDTO = GameBoardDTO(id!!, gameBoard, gameOver, Optional.ofNullable(winner) )
 
     companion object {
         fun fromDTO(gameBoardDTO: GameBoardDTO)
-                = GameBoardEntity(gameBoardDTO.id, gameBoardDTO.boardSet, gameBoardDTO.isGameOver(), gameBoardDTO.winner)
+                = GameBoardEntity(gameBoardDTO.id, gameBoardDTO.boardSet, gameBoardDTO.isGameOver(), gameBoardDTO.winner.orElse(null) )
 
     }
 }

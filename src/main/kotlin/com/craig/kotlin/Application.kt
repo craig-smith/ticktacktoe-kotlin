@@ -27,7 +27,7 @@ fun getTickTackToeService(): TickTackToeService {
 }
 
 @Bean
-        fun getGameBoardService(): GameBoardService {
+fun getGameBoardService(): GameBoardService {
     return GameBoardServiceImpl()
 }
 

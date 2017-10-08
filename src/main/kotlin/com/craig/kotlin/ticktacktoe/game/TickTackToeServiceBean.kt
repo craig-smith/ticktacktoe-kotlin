@@ -1,5 +1,7 @@
 package com.craig.kotlin.ticktacktoe.game
 
+import com.craig.kotlin.ticktacktoe.game.data.Play
+import com.craig.kotlin.ticktacktoe.game.data.Player
 import org.springframework.stereotype.Component
 import java.util.*
 import kotlin.reflect.KFunction2
@@ -168,14 +170,17 @@ class TickTackToeServiceBean : TickTackToeService {
         val optionalWinnerAcross = checkRow(gameBoardDTO, this::acrossFilter)
         if (optionalWinnerAcross.isPresent) {
             gameBoardDTO.setGameOver(optionalWinnerAcross)
+            return
         }
         val optionalWinnerVertical = checkRow(gameBoardDTO, this::verticalFilter)
         if (optionalWinnerVertical.isPresent) {
             gameBoardDTO.setGameOver(optionalWinnerVertical)
+            return
         }
         val optionalWinnerDiagonal = checkRow(gameBoardDTO, this::diagonalFilter)
         if (optionalWinnerDiagonal.isPresent) {
             gameBoardDTO.setGameOver(optionalWinnerDiagonal)
+            return
         }
 
         val emptySpots = findAllEmptySpots(gameBoardDTO)

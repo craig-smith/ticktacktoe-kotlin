@@ -3,8 +3,10 @@ package com.craig.kotlin.ticktacktoe.game.data
 import com.craig.kotlin.ticktacktoe.game.GameBoardDTO
 import com.craig.kotlin.ticktacktoe.game.GameBoardService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 import java.util.*
 
+@Component
 class GameBoardServiceImpl : GameBoardService {
 
     @Autowired
@@ -20,7 +22,7 @@ class GameBoardServiceImpl : GameBoardService {
     }
 
     override fun newGame(): GameBoardDTO {
-        var gameEntity =  GameBoardEntity(null, mutableSetOf(), false, Optional.empty())
+        var gameEntity =  GameBoardEntity(null, mutableSetOf(), false, null)
         gameBoardRepository.save(gameEntity)
         return gameEntity.toDTO()
     }

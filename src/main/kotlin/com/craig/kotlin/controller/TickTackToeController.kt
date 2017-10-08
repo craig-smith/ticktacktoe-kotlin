@@ -1,6 +1,8 @@
 package com.craig.kotlin.controller
 
 import com.craig.kotlin.ticktacktoe.game.*
+import com.craig.kotlin.ticktacktoe.game.data.Play
+import com.craig.kotlin.ticktacktoe.game.data.Player
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
@@ -59,7 +61,7 @@ class TickTackToeController {
 
     }
 
-    @PostMapping("/ticktacktoe/newGame")
+    @GetMapping("/ticktacktoe/newGame")
     fun newGame(): Game {
 
         val gameDTO = gameBoardService.newGame()

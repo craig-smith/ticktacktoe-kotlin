@@ -1,5 +1,7 @@
 package com.craig.kotlin.ticktacktoe.game
 
+import com.craig.kotlin.ticktacktoe.game.data.Play
+import com.craig.kotlin.ticktacktoe.game.data.Player
 import java.util.*
 
 class GameBoardDTO(val id: Long, moves: MutableSet<Play>, var gameOver: Boolean, var winner: Optional<Player>) {
