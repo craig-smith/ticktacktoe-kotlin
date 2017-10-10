@@ -1,7 +1,9 @@
 package com.craig.kotlin.ticktacktoe.game.data
 
 import com.craig.kotlin.ticktacktoe.game.GameBoardDTO
+import com.craig.kotlin.ticktacktoe.game.data.Play.Companion.toDTO
 import java.util.*
+import java.util.stream.Collectors
 import javax.persistence.*
 
 
@@ -24,11 +26,18 @@ internal data class GameBoardEntity(
 
     private constructor() : this(gameBoard = mutableSetOf(), gameOver = false, winner = null)
 
-    fun toDTO() : GameBoardDTO = GameBoardDTO(id!!, gameBoard, gameOver, Optional.ofNullable(winner) )
+    fun toDTO(): GameBoardDTO {
+        val gameBoardSet = gameBoard.stream().map { t: Play? -> toDTO(t!!) }.collect(Collectors.toSet())
+        return GameBoardDTO(id!!, gameBoardSet, gameOver, Optional.ofNullable(winner))
+    }
 
     companion object {
-        fun fromDTO(gameBoardDTO: GameBoardDTO)
-                = GameBoardEntity(gameBoardDTO.id, gameBoardDTO.boardSet, gameBoardDTO.isGameOver(), gameBoardDTO.winner.orElse(null) )
+        fun fromDTO(gameBoardDTO: GameBoardDTO): GameBoardEntity {
+           return  GameBoardEntity(gameBoardDTO.id,
+                    gameBoardDTO.boardSet.stream().map { e -> Play.fromDTO(e) }.collect(Collectors.toSet()),
+                    gameBoardDTO.isGameOver(), gameBoardDTO.winner.orElse(null))
+        }
+
 
     }
 }

@@ -2,6 +2,7 @@ package com.craig.kotlin.controller
 
 import com.craig.kotlin.ticktacktoe.game.*
 import com.craig.kotlin.ticktacktoe.game.data.Play
+import com.craig.kotlin.ticktacktoe.game.data.PlayDTO
 import com.craig.kotlin.ticktacktoe.game.data.Player
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -37,7 +38,7 @@ class TickTackToeController {
             tickTackToeService.setPlayerMove(gameBoardDto, game.play.get())
 
             tickTackToeService.calculateWinner(gameBoardDto)
-            val play: Play
+            val play: PlayDTO
             if (gameBoardDto.isGameOver()) {
                 return Game(game.gameBoardDTOId, Optional.empty(), Optional.ofNullable(game.play.get().player))
             } else {

@@ -1,6 +1,6 @@
 package com.craig.kotlin.ticktacktoe.game
 
-import com.craig.kotlin.ticktacktoe.game.data.Play
+import com.craig.kotlin.ticktacktoe.game.data.PlayDTO
 import com.craig.kotlin.ticktacktoe.game.data.Player
 import org.springframework.stereotype.Component
 import java.util.*
@@ -41,7 +41,7 @@ class TickTackToeServiceBean : TickTackToeService {
 
     private val allSpots: List<Int> = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
 
-    private fun acrossFilter(movesList: List<Play>, rowNum: Int): List<Play> {
+    private fun acrossFilter(movesList: List<PlayDTO>, rowNum: Int): List<PlayDTO> {
         return when (rowNum) {
             1 -> movesList.filter { play -> play.place in across1 }
             2 -> movesList.filter { play -> play.place in across2 }
@@ -50,7 +50,7 @@ class TickTackToeServiceBean : TickTackToeService {
         }
     }
 
-    private fun verticalFilter(movesList: List<Play>, columnNum: Int): List<Play> {
+    private fun verticalFilter(movesList: List<PlayDTO>, columnNum: Int): List<PlayDTO> {
         return when (columnNum) {
             1 -> movesList.filter { play -> play.place in vertical1 }
             2 -> movesList.filter { play -> play.place in vertical2 }
@@ -59,7 +59,7 @@ class TickTackToeServiceBean : TickTackToeService {
         }
     }
 
-    private fun diagonalFilter(movesList: List<Play>, diagonalNum: Int): List<Play> {
+    private fun diagonalFilter(movesList: List<PlayDTO>, diagonalNum: Int): List<PlayDTO> {
         return when (diagonalNum) {
             1 -> movesList.filter { play -> play.place in diagonal1 }
             2 -> movesList.filter { play -> play.place in diagonal2 }
@@ -67,11 +67,11 @@ class TickTackToeServiceBean : TickTackToeService {
         }
     }
 
-    override fun setPlayerMove(gameBoardDTO: GameBoardDTO, play: Play) {
-        gameBoardDTO.setMove(play)
+    override fun setPlayerMove(gameBoardDTO: GameBoardDTO, playDTO: PlayDTO) {
+        gameBoardDTO.setMove(playDTO)
     }
 
-    override fun setComputerMove(gameBoardDTO: GameBoardDTO, player: Player): Play {
+    override fun setComputerMove(gameBoardDTO: GameBoardDTO, player: Player): PlayDTO {
         val bestComputerMove = calculateBestMove(gameBoardDTO, player)
         val bestOpponentMove =  if (player == Player.X) {
             calculateBestMove(gameBoardDTO, Player.O)
@@ -81,15 +81,15 @@ class TickTackToeServiceBean : TickTackToeService {
 
         return when {
             bestComputerMove.win -> {
-                gameBoardDTO.setMove(Play(bestComputerMove.spot, player.name))
-                Play(bestComputerMove.spot, player.name)
+                gameBoardDTO.setMove(PlayDTO(null, bestComputerMove.spot, player.name))
+                PlayDTO(null, bestComputerMove.spot, player.name)
             }
             else -> if(bestOpponentMove.win) {
-                gameBoardDTO.setMove(Play(bestOpponentMove.spot, player.name))
-                Play(bestOpponentMove.spot, player.name)
+                gameBoardDTO.setMove(PlayDTO(null, bestOpponentMove.spot, player.name))
+                PlayDTO(null, bestOpponentMove.spot, player.name)
             } else {
-                gameBoardDTO.setMove(Play(bestComputerMove.spot, player.name))
-                Play(bestComputerMove.spot, player.name)
+                gameBoardDTO.setMove(PlayDTO(null, bestComputerMove.spot, player.name))
+                PlayDTO(null, bestComputerMove.spot, player.name)
             }
         }
 
@@ -143,8 +143,8 @@ class TickTackToeServiceBean : TickTackToeService {
         } else BestMove(0, false)
     }
 
-    private fun checkRowForWinningMove(playerMoves: List<Play>, emptySpots: List<Int>,
-                                       filterFunction: KFunction2<@ParameterName(name = "movesList") List<Play>, @ParameterName(name = "rowNum") Int, List<Play>>,
+    private fun checkRowForWinningMove(playerMoves: List<PlayDTO>, emptySpots: List<Int>,
+                                       filterFunction: KFunction2<@ParameterName(name = "movesList") List<PlayDTO>, @ParameterName(name = "rowNum") Int, List<PlayDTO>>,
                                        rowNum: Int, row: List<Int>): BestMove {
         val playerMovesOnRow = filterFunction(playerMoves, rowNum).map { play -> play.place }
         if (playerMovesOnRow.size != 3) {
@@ -189,7 +189,7 @@ class TickTackToeServiceBean : TickTackToeService {
         }
     }
 
-    private fun checkRow(gameBoardDTO: GameBoardDTO, filterFunction: KFunction2<@ParameterName(name = "movesList") List<Play>, @ParameterName(name = "rowNum") Int, List<Play>>): Optional<Player> {
+    private fun checkRow(gameBoardDTO: GameBoardDTO, filterFunction: KFunction2<@ParameterName(name = "movesList") List<PlayDTO>, @ParameterName(name = "rowNum") Int, List<PlayDTO>>): Optional<Player> {
         for (i in 1..3) {
             val xMatch = filterFunction(gameBoardDTO.boardSet.toList(), i).filter { play -> play.player == Player.X }
             if (xMatch.size == 3) {

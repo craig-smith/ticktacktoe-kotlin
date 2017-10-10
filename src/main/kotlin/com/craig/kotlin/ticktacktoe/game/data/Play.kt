@@ -1,26 +1,28 @@
 package com.craig.kotlin.ticktacktoe.game.data
 
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
 
 @Entity(name = "PLAY")
-class Play @JsonCreator(mode=JsonCreator.Mode.DELEGATING) constructor(place: Int, player: String) {
+class Play constructor(id: Long?, place: Int, player: Player) {
 
     @Id
-    @JsonIgnore
     var id: Long? = null
 
     @Column(name = "PLACE")
-    @JsonProperty("place")
     var place: Int = place
 
     @Column(name = "PLAYER")
-    @JsonProperty("player")
-    var playerString: String = player
+    var player: Player = player
 
-    @Transient
-    @JsonIgnore
-    var player: Player = Player.valueOf(playerString)
+    companion object {
+        fun toDTO(play: Play) : PlayDTO {
+            return PlayDTO(play.id, play.place, play.player.name)
+        }
+
+        fun fromDTO(playDTO: PlayDTO): Play {
+            return Play(playDTO.id, playDTO.place, Player.valueOf(playDTO.playerString))
+        }
+    }
 }

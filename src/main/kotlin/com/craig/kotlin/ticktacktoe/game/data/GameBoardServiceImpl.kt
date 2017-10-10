@@ -26,4 +26,5 @@ class GameBoardServiceImpl : GameBoardService {
         gameBoardRepository.save(gameEntity)
         return gameEntity.toDTO()
     }
+
 }

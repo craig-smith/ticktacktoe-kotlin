@@ -84,8 +84,9 @@ function sendPlay(value){
             var play = {place: value, player: player};
 
             var game = {};
-            game.gameId = ticktacktoe.gameId;
+            game.gameBoardDTOId = ticktacktoe.gameId;
             game.play = play;
+            game.winner = undefined;
 
             $.ajax({
                 type: 'post',
@@ -98,7 +99,7 @@ function sendPlay(value){
                 }
             });
 
-            ticktacktoe.gameBoardDTO[value].player = player;
+            ticktacktoe.gameBoardDTO[value - 1].player = player;
 
         }
     }
