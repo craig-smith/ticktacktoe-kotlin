@@ -40,7 +40,7 @@ class TickTackToeController {
             tickTackToeService.calculateWinner(gameBoardDto)
             val play: PlayDTO
             if (gameBoardDto.isGameOver()) {
-                return Game(game.gameBoardDTOId, Optional.empty(), Optional.ofNullable(game.play.get().player))
+                return Game(game.gameBoardDTOId, Optional.empty(), gameBoardDto.winner, Optional.of(true))
             } else {
                 play = if (game.play.get().player.equals(Player.O)) tickTackToeService.setComputerMove(gameBoardDto, Player.X)
                 else tickTackToeService.setComputerMove(gameBoardDto, Player.O)
@@ -49,15 +49,15 @@ class TickTackToeController {
             val returnGame: Game
 
             returnGame = if (gameBoardDto.isGameOver()) {
-                Game(gameBoardDto.id, Optional.ofNullable(play), Optional.ofNullable(play.player))
+                Game(gameBoardDto.id, Optional.ofNullable(play), gameBoardDto.winner, Optional.of(true))
             } else {
-                Game(gameBoardDto.id, Optional.ofNullable(play), Optional.empty())
+                Game(gameBoardDto.id, Optional.ofNullable(play), Optional.empty(), Optional.of(false))
             }
             gameBoardService.save(gameBoardDto)
             return returnGame
         } else {
 
-            return Game(0, Optional.empty(), Optional.empty())
+            return Game(0, Optional.empty(), Optional.empty(), Optional.of(true))
         }
 
     }
@@ -66,7 +66,7 @@ class TickTackToeController {
     fun newGame(): Game {
 
         val gameDTO = gameBoardService.newGame()
-        return Game(gameDTO.id, Optional.empty(), Optional.empty())
+        return Game(gameDTO.id, Optional.empty(), Optional.empty(), Optional.of(false))
     }
 
 }

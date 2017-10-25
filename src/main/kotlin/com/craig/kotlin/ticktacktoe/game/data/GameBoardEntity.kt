@@ -14,7 +14,7 @@ internal data class GameBoardEntity(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long? = null,
 
-        @OneToMany(targetEntity = Play::class, mappedBy = "id")
+        @OneToMany(targetEntity = Play::class, mappedBy = "gameBoardId", cascade = arrayOf(CascadeType.ALL))
         val gameBoard: MutableSet<Play>,
 
         @Column(name = "GAME_OVER")
@@ -34,7 +34,7 @@ internal data class GameBoardEntity(
     companion object {
         fun fromDTO(gameBoardDTO: GameBoardDTO): GameBoardEntity {
            return  GameBoardEntity(gameBoardDTO.id,
-                    gameBoardDTO.boardSet.stream().map { e -> Play.fromDTO(e) }.collect(Collectors.toSet()),
+                    gameBoardDTO.boardSet.stream().map { e -> Play.fromDTO(e, gameBoardDTO.id) }.collect(Collectors.toSet()),
                     gameBoardDTO.isGameOver(), gameBoardDTO.winner.orElse(null))
         }
 

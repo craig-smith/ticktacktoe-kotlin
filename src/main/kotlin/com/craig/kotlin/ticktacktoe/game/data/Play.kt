@@ -1,14 +1,16 @@
 package com.craig.kotlin.ticktacktoe.game.data
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity(name = "PLAY")
-class Play constructor(id: Long?, place: Int, player: Player) {
+class Play constructor(id: Long?, gameBoardId: Long?, place: Int, player: Player) {
 
     @Id
-    var id: Long? = null
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = id
+
+    @Column(name = "GAMEBOARD_ID")
+    var gameBoardId: Long? = gameBoardId
 
     @Column(name = "PLACE")
     var place: Int = place
@@ -21,8 +23,9 @@ class Play constructor(id: Long?, place: Int, player: Player) {
             return PlayDTO(play.id, play.place, play.player.name)
         }
 
-        fun fromDTO(playDTO: PlayDTO): Play {
-            return Play(playDTO.id, playDTO.place, Player.valueOf(playDTO.playerString))
+        fun fromDTO(playDTO: PlayDTO, gameBoardId: Long?): Play {
+            val play = Play(playDTO.id, gameBoardId,  playDTO.place, Player.valueOf(playDTO.playerString))
+            return play
         }
     }
 }

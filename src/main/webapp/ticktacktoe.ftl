@@ -19,6 +19,7 @@
                  -ms-transition: background-color 1000ms linear;
                   transition: background-color 1000ms linear;
                   }
+
     </style>
 </head>
 
@@ -32,19 +33,42 @@
         <h2 v-else></h2>
 
         <tr>
-            <td v-bind:class="{green: gameBoardDTO[0].player === 'O', red: gameBoardDTO[0].player === 'X'}" style="border-right:solid; border-bottom:solid" onclick="sendPlay(1)">{{gameBoardDTO[0].player}}</td>
-            <td v-bind:class="{green: gameBoardDTO[1].player === 'O', red: gameBoardDTO[1].player === 'X'}" style="border-bottom:solid; border-left:solid; border-right:solid" onclick="sendPlay(2)">{{gameBoardDTO[1].player}}</td>
-            <td v-bind:class="{green: gameBoardDTO[2].player === 'O', red: gameBoardDTO[2].player === 'X'}" style="border-left:solid; border-bottom:solid" onclick="sendPlay(3)">{{gameBoardDTO[2].player}}</td>
+            <td v-bind:class="{green: gameBoardDTO[0].player === 'O', red: gameBoardDTO[0].player === 'X'}"
+                style="border-right:solid; border-bottom:solid" onclick="sendPlay(1)">{{gameBoardDTO[0].player}}
+            </td>
+            <td v-bind:class="{green: gameBoardDTO[1].player === 'O', red: gameBoardDTO[1].player === 'X'}"
+                style="border-bottom:solid; border-left:solid; border-right:solid" onclick="sendPlay(2)">
+                {{gameBoardDTO[1].player}}
+            </td>
+            <td v-bind:class="{green: gameBoardDTO[2].player === 'O', red: gameBoardDTO[2].player === 'X'}"
+                style="border-left:solid; border-bottom:solid" onclick="sendPlay(3)">{{gameBoardDTO[2].player}}
+            </td>
         </tr>
         <tr>
-            <td v-bind:class="{green: gameBoardDTO[3].player === 'O', red: gameBoardDTO[3].player === 'X'}" style="border-right:solid; border-bottom:solid; border-top:solid" onclick="sendPlay(4)">{{gameBoardDTO[3].player}}</td>
-            <td v-bind:class="{green: gameBoardDTO[4].player === 'O', red: gameBoardDTO[4].player === 'X'}" style="border-bottom:solid; border-left:solid; border-right:solid; border-top:solid" onclick="sendPlay(5)">{{gameBoardDTO[4].player}}</td>
-            <td v-bind:class="{green: gameBoardDTO[5].player === 'O', red: gameBoardDTO[5].player === 'X'}" style="border-left:solid; border-top:solid; border-bottom:solid" onclick="sendPlay(6)">{{gameBoardDTO[5].player}}</td>
+            <td v-bind:class="{green: gameBoardDTO[3].player === 'O', red: gameBoardDTO[3].player === 'X'}"
+                style="border-right:solid; border-bottom:solid; border-top:solid" onclick="sendPlay(4)">
+                {{gameBoardDTO[3].player}}
+            </td>
+            <td v-bind:class="{green: gameBoardDTO[4].player === 'O', red: gameBoardDTO[4].player === 'X'}"
+                style="border-bottom:solid; border-left:solid; border-right:solid; border-top:solid"
+                onclick="sendPlay(5)">{{gameBoardDTO[4].player}}
+            </td>
+            <td v-bind:class="{green: gameBoardDTO[5].player === 'O', red: gameBoardDTO[5].player === 'X'}"
+                style="border-left:solid; border-top:solid; border-bottom:solid" onclick="sendPlay(6)">
+                {{gameBoardDTO[5].player}}
+            </td>
         </tr>
         <tr>
-            <td v-bind:class="{green: gameBoardDTO[6].player === 'O', red: gameBoardDTO[6].player === 'X'}" style="border-right:solid; border-top:solid" onclick="sendPlay(7)">{{gameBoardDTO[6].player}}</td>
-            <td v-bind:class="{green: gameBoardDTO[7].player === 'O', red: gameBoardDTO[7].player === 'X'}" style="border-top:solid; border-left:solid; border-right:solid" onclick="sendPlay(8)">{{gameBoardDTO[7].player}}</td>
-            <td v-bind:class="{green: gameBoardDTO[8].player === 'O', red: gameBoardDTO[8].player === 'X'}" style="border-left:solid; border-top:solid" onclick="sendPlay(9)">{{gameBoardDTO[8].player}}</td>
+            <td v-bind:class="{green: gameBoardDTO[6].player === 'O', red: gameBoardDTO[6].player === 'X'}"
+                style="border-right:solid; border-top:solid" onclick="sendPlay(7)">{{gameBoardDTO[6].player}}
+            </td>
+            <td v-bind:class="{green: gameBoardDTO[7].player === 'O', red: gameBoardDTO[7].player === 'X'}"
+                style="border-top:solid; border-left:solid; border-right:solid" onclick="sendPlay(8)">
+                {{gameBoardDTO[7].player}}
+            </td>
+            <td v-bind:class="{green: gameBoardDTO[8].player === 'O', red: gameBoardDTO[8].player === 'X'}"
+                style="border-left:solid; border-top:solid" onclick="sendPlay(9)">{{gameBoardDTO[8].player}}
+            </td>
         </tr>
     </table>
 </div>
@@ -107,18 +131,22 @@ function sendPlay(value){
 
 }
 function resetBoard(jsonData) {
-
-    ticktacktoe.gameBoardDTO[jsonData.play.place].player = jsonData.play.player;
-
-    if( jsonData.game.gameOver === true ) {
+    if( jsonData.gameOver === true ) {
         ticktacktoe.gameOver = true;
-        if(jsonData.game.winner === null) {
+        if(jsonData.winner === null) {
             ticktacktoe.winner = "No Winner, Tied Game!";
         } else {
-            ticktacktoe.winner = jsonData.game.winner;
+            ticktacktoe.winner = jsonData.winner;
         }
 
     }
+
+    if( jsonData.play != null ) {
+        ticktacktoe.gameBoardDTO[jsonData.play.place - 1].player = jsonData.play.player;
+    }
+
+
+
 }
 
 
@@ -148,6 +176,7 @@ $("input:radio[name=player]").click(function() {
      }
 
 });
+
 
 </script>
 </html>
