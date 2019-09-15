@@ -1,6 +1,7 @@
 package com.craig.kotlin.ticktacktoe.game.data
 
 import com.craig.kotlin.ticktacktoe.game.GameBoardDTO
+import com.craig.kotlin.ticktacktoe.game.Player
 import com.craig.kotlin.ticktacktoe.game.data.Play.Companion.toDTO
 import java.util.*
 import java.util.stream.Collectors

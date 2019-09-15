@@ -1,7 +1,6 @@
 package com.craig.kotlin.ticktacktoe.game
 
 import com.craig.kotlin.ticktacktoe.game.data.PlayDTO
-import com.craig.kotlin.ticktacktoe.game.data.Player
 import org.springframework.stereotype.Component
 import java.util.*
 import kotlin.reflect.KFunction2

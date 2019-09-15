@@ -2,3 +2,5 @@
 /target/
 /.idea/
 *.iml
+/ticktacktoe-server/target/
+/ticktacktoe-dto/target/

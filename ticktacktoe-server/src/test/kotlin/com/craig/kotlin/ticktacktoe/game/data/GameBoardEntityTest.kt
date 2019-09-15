@@ -1,6 +1,7 @@
 package com.craig.kotlin.ticktacktoe.game.data
 
 import com.craig.kotlin.ticktacktoe.game.GameBoardDTO
+import com.craig.kotlin.ticktacktoe.game.Player
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.*

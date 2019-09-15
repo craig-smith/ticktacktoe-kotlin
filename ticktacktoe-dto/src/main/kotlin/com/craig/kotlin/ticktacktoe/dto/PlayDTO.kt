@@ -1,5 +1,6 @@
 package com.craig.kotlin.ticktacktoe.game.data
 
+import com.craig.kotlin.ticktacktoe.game.Player
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty

@@ -1,5 +1,6 @@
 package com.craig.kotlin.ticktacktoe.game.data
 
+import com.craig.kotlin.ticktacktoe.game.Player
 import javax.persistence.*
 
 @Entity(name = "PLAY")

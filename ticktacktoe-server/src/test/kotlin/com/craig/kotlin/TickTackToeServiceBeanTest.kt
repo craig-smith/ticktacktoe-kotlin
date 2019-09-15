@@ -1,8 +1,7 @@
 package com.craig.kotlin
 
 import com.craig.kotlin.ticktacktoe.game.GameBoardDTO
-import com.craig.kotlin.ticktacktoe.game.data.Play
-import com.craig.kotlin.ticktacktoe.game.data.Player
+import com.craig.kotlin.ticktacktoe.game.Player
 import com.craig.kotlin.ticktacktoe.game.TickTackToeServiceBean
 import com.craig.kotlin.ticktacktoe.game.data.PlayDTO
 import org.junit.Test
