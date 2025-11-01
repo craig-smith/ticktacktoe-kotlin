@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Hello Kotlin</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <style>
         td {height: 60px; width: 60px; padding: 0px; margin: 0px; text-align:center;}
         tr {padding: 0px; margin: 0px; border: transparent}
